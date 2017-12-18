@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block head %}
+<title>Timeline</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='timeline.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <!-- Contends of the Navigation bar-->
+    <div class="container-fluid">
+        <div class="row nav">
+            <div class="col-sm-4 col-4 col-md-4">
+                <ul class="list-unstyled">
+                    <li class="home"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fa fa-bell-o"></i> Notifications</a></li>
+                </ul>
+            </div>
+            <!--Creating the twitter icon on navbar-->
+            <div class="col-sm-4 col-4 col-md-4">
+                <div class="row">
+                    <div class="col-sm-3 mx-auto">
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!--Displaying the profile info on timeline at left hand side-->
+            <div class="col-sm-4 col-4 col-md-4">
+                <div class="row">
+                    <div class="col-sm-6 ml-auto">
+                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo"></a>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item font-weight-bold">{{ current_user.username }}</a>
+                            <a href="#" class="dropdown-item text-secondary">@{{ current_user.email[:-10] }}</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-secondary">Profile</a>
+                            <a href="#" class="dropdown-item text-secondary">Help Center</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ url_for('logout') }}" class="dropdown-item text-secondary">Logout</a>
+
+                        </div>
+                        <button class="btn btn-info tweet" type="button">Tweet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Contends of the timeline-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <!--Creating the profile info part of the timeline-->
+                <div class="card">
+                    <img src="http://www.broughtonschoolofmotoring.com/wp-content/uploads/1.jpeg" alt="#" width="100%"
+                     height="100">
+                     <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="#" width="86" height="80"
+                     class="photo pic">
+                     <div class="profile_name">
+                         <h5><a href="#">{{ current_user.username }}</a></h5>
+                         <p><a href="#" class="text-secondary">@{{ current_user.email[:-10] }}</a></p>
+                     </div>
+                     <div class="row total_tweets">
+                         <div class="col-sm-4 col-4 tweets">
+                         <p>Tweets</p>
+                         <p class="numbers">{{ total_tweets }}</p>
+                         </div>
+                         <div class="col-sm-4 col-4 following">
+                         <p>Following</p>
+                         <p class="numbers">{{ user_profile.following }}</p>
+                         </div>
+                         <div class="col-sm-4 col-4 followers">
+                         <p>Followers</p>
+                         <p class="numbers">1</p>
+                         </div>
+                     </div>
+                </div>
+            </div>
+            <!--Creating the posting tweet input of timeline-->
+            <div class="col-sm-6">
+                <div class="card textfield">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo text_pic">
+                            </div>
+                            {% from "_formhelpers.html" import render_field %}
+                            <div class="col-sm-10">
+                                <form action="{{ url_for('timeline', username=current_user.username) }}" method="POST">
+                                    {{ form.hidden_tag() }}
+                                    {{ render_field(form.tweet, class="form-control", rows="3", placeholder="What's happening?") }}
+
+                                    <button class="btn text_btn float-right" type="submit">Tweet</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Displaying the Total number of tweets in timeline page-->
+                {% for tweet in tweets %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2 col-sm-2">
+                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="60" height="55" class="photo text_pic">
+                            </div>
+                            <div class="col-10 col-sm-10">
+                                <div class="row">
+                                    <div class="col-4 col-sm-4"><a href="#" class="tweet_name">{{ current_user.username }}</a></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ current_user.email[:-10] }}</p></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_date">-{{ tweet.date }}</p></div>
+                                </div>
+                                <p class="tweet_text">{{ tweet.tweet }}</p>
+                            </div>
+                        </div>
+                        <!--Creating Tweet likes and retweet-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><a href="#"><i class="fa fa-retweet"></i></a>&nbsp {{ tweet.retweet }}</li>
+                                    <li class="list-inline-item"><a href="#"><i class="fa fa-heart-o"></i></a>&nbsp {{ tweet.likes }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!--Creating Who to follow section-->
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="follow_title">Who to follow</h5>
+                        {% for user in display_users %}
+                        <div class="row">
+                            <div class="col-sm-3 col-3">
+                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
+                            </div>
+                            <div class="col-sm-9 col-9">
+                                <h6>{{ user.username }} <span class="follow_email">@{{ user.email[:-10] }}</span></h6>
+                                <button class="btn follow_btn" type="button">Follow</button>
+
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--Creating Ads and privacy policy-->
+                <div class="card ads">
+                    <div class="card-body">
+                        <p class="text-secondary">© 2017 Twitter About Help CenterTerms Privacy policy Cookies Ads info Brand Blog Status Apps Jobs Marketing Businesses Developers</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#">Advertise with Twitter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

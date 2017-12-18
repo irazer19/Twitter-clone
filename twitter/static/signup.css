@@ -1,0 +1,45 @@
+/*Styling the Navigation bar*/
+nav a {
+	font-size: 1.8em;
+	color: white;
+}
+
+nav a:hover {
+	color: white;
+}
+
+nav {
+	background: linear-gradient(to right, #42b6f4, #3ef995);
+	padding: 10px;
+}
+
+/*Stlying the container and its contents*/
+.container {
+	padding-top: 80px;
+}
+
+h3 {
+	font-weight: bold;
+}
+
+.form-group {
+	padding-top: 10px;
+}
+
+button {
+	width: 100%;
+	margin-top: 30px;
+	border-radius: 500px !important;
+	background-color: #1da1f2 !important;
+	border: 1px solid #1da1f2 !important;
+	font-weight: bold !important;
+}
+
+button:hover {
+	background-color: #217fd1 !important;
+}
+
+p {
+	padding-top: 15px;
+	font-size: 12px;
+}

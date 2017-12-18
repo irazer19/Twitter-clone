@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}
+<title>Signup</title>
+<link rel="stylesheet" href="{{url_for('static', filename='signup.css')}}">
+{% endblock %}
+{% block content %}
+
+<body>
+    <!--Creating the Navigation bar-->
+    <nav>
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-3">
+                <a href="{{ url_for('login') }}"><i class="fa fa-twitter"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!--Creating the Signup Form-->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 mx-auto">
+                <h3>Join Twitter today</h3>
+                {% from "_formhelpers.html" import render_field %}
+                <form action="{{ url_for('signup') }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ render_field(form.username, class="form-control", placeholder="Name")}}
+                    {% if unique_error %}
+                    <ul>
+                        <li class="text-danger">{{ unique_error }}</li>
+                    </ul>
+                    {% endif %}
+                    {{ render_field(form.email, class="form-control", placeholder="Email")}}
+                    {{ render_field(form.password, class="form-control", placeholder="Password")}}
+                    <button class="btn btn-info btn-lg" type="submit">Sign Up</button>
+                </form>
+                <p>By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>. Others will be able to find you by email or phone number when provided.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+/*Styling the Login navigation bar*/
+.navbar {
+    background-color: #1da1f2 !important;
+}
+
+nav button {
+    border-radius: 500px !important;
+}
+
+.navbar-toggler-icon {
+    color: white !important;
+}
+
+.fa-twitter {
+    font-size: 2em;
+    color: white;
+    margin-left: 80px;
+    margin-top: 20px;
+}
+
+.head {
+    background-color: #1da1f2;
+    padding-bottom: 60px;
+}
+
+.head h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 3em;
+}
+
+button {
+    padding-bottom: 5px 20px !important;
+    font-weight: bold !important;
+}
+
+button:hover {
+    color: #1da1f2 !important;
+}
+
+.card {
+    margin-top: 60px;
+    padding: 20px 5px;
+    background-color: #1da1f2;
+}
+
+.card-title {
+    padding-bottom: 10px;
+}
+
+.card-title h3 {
+    font-weight: bold;
+}
+
+.btn-block {
+    border-radius: 500px;
+    margin-top: 25px;
+    cursor: pointer;
+    background-color: white !important;
+    color: #1da1f2 !important
+}
+
+.btn-block:hover {
+    color: #1da1f2 !important;
+    border-color: white !important;
+}

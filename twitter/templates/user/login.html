@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block head %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+<title>Login</title>
+
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <a href="#" class="navbar-brand"><i class="fa fa-twitter"></i></a>
+        <button class="navbar-toggler" type="button" data-target="#collapsibleNavbar" data-toggle="collapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('signup') }}" class="nav-link">
+                        <button class="btn btn-outline-light">Sign Up</button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row head">
+            <div class="col-sm-6 mx-auto text-center">
+                <h1>What's happening?</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title text-center"><h3>Log in to your account</h3></div>
+                        {% from "_formhelpers.html" import render_field %}
+                        <form action="#" method="POST">
+                            {{ form.hidden_tag() }}
+                            {% if error %}
+                            <ul>
+                                <li class="text-danger">{{ error }}</li>
+                            </ul>
+                            {% endif %}
+                            {{ render_field(form.username, class="form-control", placeholder="Username") }}
+                            {{ render_field(form.password, class="form-control", placeholder="Password") }}
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            {{ form.remember(type="checkbox", class="form-check-input") }}Remember me
+                          </label>
+                        </div>
+
+                            <button class="btn btn-info btn-block" type="submit">Log in</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}
