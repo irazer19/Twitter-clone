@@ -119,7 +119,11 @@
                             <div class="col-sm-12">
                                 <ul class="list-inline">
                                     <li class="list-inline-item"><a href="#"><i class="fa fa-retweet"></i></a>&nbsp {{ tweet.retweet }}</li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-heart-o"></i></a>&nbsp {{ tweet.likes }}</li>
+                                    {% if tweet.likes > 0 %}
+                                    <li class="list-inline-item"><a href="#" id="{{ tweet.id }}" class="like_color" onclick="sendLikes(this)"><i class="fa fa-heart"></i></a>&nbsp {{ tweet.likes }}</li>
+                                    {% else %}
+                                    <li class="list-inline-item"><a href="#" id="{{ tweet.id }}" class="heart" onclick="sendLikes(this)"><i class="fa fa-heart"></i></a>&nbsp {{ tweet.likes }}</li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>
@@ -149,7 +153,11 @@
                             <div class="col-sm-12">
                                 <ul class="list-inline">
                                     <li class="list-inline-item"><a href="#"><i class="fa fa-retweet"></i></a>&nbsp {{ tweets.retweet }}</li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-heart-o"></i></a>&nbsp {{ tweets.likes }}</li>
+                                    {% if tweets.likes > 0 %}
+                                    <li class="list-inline-item"><a href="#" id="{{ tweets.id }}" class="like_color" onclick="sendLikes(this)"><i class="fa fa-heart"></i></a>&nbsp {{ tweets.likes }}</li>
+                                    {% else %}
+                                    <li class="list-inline-item"><a href="#" id="{{ tweets.id }}" class="heart" onclick="sendLikes(this)"><i class="fa fa-heart"></i></a>&nbsp {{ tweets.likes }}</li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>

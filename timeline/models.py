@@ -6,7 +6,7 @@ class Tweets(db.Model):
     username = db.Column(db.String(80))
     retweet = db.Column(db.Integer)
     likes = db.Column(db.Integer)
-    date = db.Column(db.String(40))
+    date = db.Column(db.String(30))
 
     def __init__(self, tweet, username, date, retweet=0, likes=0):
         self.tweet = tweet

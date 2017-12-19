@@ -214,6 +214,10 @@ body {
     color: #777777;
 }
 
-.fa-retweet, .fa-heart-o {
+.like_color {
+    color: red;
+}
+
+.fa-retweet, .heart {
     color: #777777;
 }

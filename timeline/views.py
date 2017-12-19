@@ -22,12 +22,13 @@ def timeline(username):
     form = Tweet()
     user = Signup.query.filter_by(id=current_user.id).first()
     #Creating tweet and posting them
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         tweet = Tweets(form.tweet.data, user.username, date.today().strftime('%d %B, %Y'))
         db.session.add(tweet)
         db.session.commit()
+        return redirect(url_for('timeline', username=user.username))
     # Generating all the self made tweets
-    tweets = Tweets.query.filter_by(username=username).all()
+    tweets = Tweets.query.filter_by(username=username).order_by(Tweets.id.desc()).all()
     user_profile = user.profile.first()
     total_attrib = []
     #Finding the total number of tweets
@@ -40,7 +41,7 @@ def timeline(username):
     followers = Followers.query.filter_by(username=user.username).all()
     total_attrib.append(len(followers))
     for following_user in following:
-        user_tweets = Tweets.query.filter_by(username=following_user.following).all()
+        user_tweets = Tweets.query.filter_by(username=following_user.following).order_by(Tweets.id.desc()).all()
         #Appending all the tweets made by a single user in a list!
         following_tweets.append(user_tweets)
     # Displaying the 'who to follow' section and including 3 random real users in it
@@ -87,6 +88,22 @@ def fname():
         db.session.add(following)
         db.session.commit()
         return 'Unfollow'
+
+
+@app.route('/likes', methods=['POST'])
+def likes():
+    """Creating method to handle ajax for number of tweet likes"""
+    data = request.json['like']
+    tid = request.json['id']
+    tweet = Tweets.query.filter_by(id=tid).first()
+    if data == 'True':
+        tweet.likes = tweet.likes + 1
+        db.session.commit()
+        return 'success'
+    else:
+        tweet.likes = tweet.likes - 1
+        db.session.commit()
+        return 'success'
 
 @app.route('/profile/<username>')
 def profile(username):
