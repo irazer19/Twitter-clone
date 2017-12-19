@@ -15,6 +15,24 @@ class Tweets(db.Model):
         self.likes = likes
         self.date = date
 
+class Followers(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80))
+    followers = db.Column(db.String(80))
+
+    def __init__(self, username=username, followers=followers):
+        self.username = username
+        self.followers = followers
+
+class Following(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80))
+    following = db.Column(db.String(80))
+
+    def __init__(self, username=username, following=following):
+        self.username = username
+        self.following = following
+
 
 
 

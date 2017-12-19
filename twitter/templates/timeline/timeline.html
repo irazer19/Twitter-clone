@@ -126,6 +126,37 @@
                     </div>
                 </div>
                 {% endfor %}
+
+                {% for user_tweets in following_tweets %}
+                {% for tweets in user_tweets %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2 col-sm-2">
+                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="60" height="55" class="photo text_pic">
+                            </div>
+                            <div class="col-10 col-sm-10">
+                                <div class="row">
+                                    <div class="col-4 col-sm-4"><a href="#" class="tweet_name">{{ tweets.username }}</a></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ current_user.email[:-10] }}</p></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_date">-{{ tweets.date }}</p></div>
+                                </div>
+                                <p class="tweet_text">{{ tweets.tweet }}</p>
+                            </div>
+                        </div>
+                        <!--Creating Tweet likes and retweet-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><a href="#"><i class="fa fa-retweet"></i></a>&nbsp {{ tweets.retweet }}</li>
+                                    <li class="list-inline-item"><a href="#"><i class="fa fa-heart-o"></i></a>&nbsp {{ tweets.likes }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
             </div>
 
             <!--Creating Who to follow section-->
@@ -139,8 +170,10 @@
                                 <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
                             </div>
                             <div class="col-sm-9 col-9">
-                                <h6>{{ user.username }} <span class="follow_email">@{{ user.email[:-10] }}</span></h6>
-                                <button class="btn follow_btn" type="button">Follow</button>
+                                <h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
+                                @{{ user[0].email[:-10] }}</span></h6>
+                                <button class="btn follow_btn" type="button" id="{{ user[0].username }}" 
+                                onclick="sendName(this)">{{ user[1] }}</button>
 
                             </div>
                         </div>
@@ -160,6 +193,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='follow.js') }}"></script>
 </body>
 
 {% endblock %}
