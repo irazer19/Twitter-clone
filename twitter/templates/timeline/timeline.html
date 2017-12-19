@@ -63,15 +63,15 @@
                      <div class="row total_tweets">
                          <div class="col-sm-4 col-4 tweets">
                          <p>Tweets</p>
-                         <p class="numbers">{{ total_tweets }}</p>
+                         <p class="numbers">{{ total_attrib[0] }}</p>
                          </div>
                          <div class="col-sm-4 col-4 following">
                          <p>Following</p>
-                         <p class="numbers">{{ user_profile.following }}</p>
+                         <p class="numbers">{{ total_attrib[1] }}</p>
                          </div>
                          <div class="col-sm-4 col-4 followers">
                          <p>Followers</p>
-                         <p class="numbers">1</p>
+                         <p class="numbers">{{ total_attrib[2] }}</p>
                          </div>
                      </div>
                 </div>

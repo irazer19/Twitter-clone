@@ -29,12 +29,16 @@ def timeline(username):
     # Generating all the self made tweets
     tweets = Tweets.query.filter_by(username=username).all()
     user_profile = user.profile.first()
+    total_attrib = []
     #Finding the total number of tweets
-    total_tweets = len(tweets)
+    total_attrib.append(len(tweets))
     users = Signup.query.filter(Signup.username!=user.username).all()
     # Storing the instance of each user tweets in a list and sending it to the html file
     following_tweets = []
     following = Following.query.filter_by(username=user.username).all()
+    total_attrib.append(len(following))
+    followers = Followers.query.filter_by(username=user.username).all()
+    total_attrib.append(len(followers))
     for following_user in following:
         user_tweets = Tweets.query.filter_by(username=following_user.following).all()
         #Appending all the tweets made by a single user in a list!
@@ -55,7 +59,7 @@ def timeline(username):
     return render_template('timeline/timeline.html', 
                             form=form, tweets=tweets, 
                             display_users=display_users, 
-                            total_tweets=total_tweets,
+                            total_attrib=total_attrib,
                             user_profile=user_profile,
                             following_tweets=following_tweets)
 
