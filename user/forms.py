@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, validators, BooleanField
+from flask_wtf.file import FileField, FileAllowed
 
 
 class SignupForm(FlaskForm):
@@ -15,3 +16,12 @@ class LoginForm(FlaskForm):
 	username = StringField('Username', [validators.Required('Please enter your username.')])
 	password = PasswordField('Password', [validators.Required('Please enter your password.')])
 	remember = BooleanField('Remember me')
+
+
+class ProfileForm(FlaskForm):
+	username = StringField('Username', [validators.Required('Please enter your username.')])
+	bio = StringField('Bio')
+	location = StringField('Location')
+	website = StringField('Website')
+	profile_photo = FileField('Display picture', validators=[FileAllowed(['jpg', 'png'], 'Images only')])
+	header_photo = FileField('Header picture', validators=[FileAllowed(['jpg', 'png'], 'Images only')])

@@ -1,0 +1,286 @@
+body {
+    background-color: #e6ecef;
+    overflow-x: hidden;
+}
+
+/* Styling the Navigation Bar */
+.container-fluid {
+    padding-top: 15px;
+    background-color: white;
+}
+
+.nav {
+    border-bottom: 1px solid #dbdbdb;
+    box-shadow: 0px 2px 2px #dbdbdb;
+}
+
+.nav li a {
+    text-decoration: none;
+    color: #969494;
+}
+
+.nav li a:hover {
+    color: #1da1f2;
+}
+
+.nav li {
+    float: left;
+    margin-left: 20px;
+    padding: 6px 9px;
+    font-weight: bold;
+}
+
+.nav li:hover {
+    border-bottom: 3px solid #1da1f2;
+}
+
+.fa {
+    font-size: 1.2em;
+}
+
+.fa-twitter {
+    font-size: 1.5em;
+    color: #1da1f2;
+}
+
+.photo {
+    border-radius: 50%;
+}
+
+.dropdown-toggle {
+    margin-right: 25px;
+    margin-left: -20px;
+}
+
+@media screen and (max-width: 1028px) {
+    .dropdown-toggle {
+        margin-left: -10px;
+    }
+
+    .tweet {
+        margin-left: -20px;
+        margin-top: 20px;
+    }
+}
+
+.tweet {
+    border-radius: 500px;
+    border-color: #49b9ff;
+    background-color: #49b9ff;
+    width: 5em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.dropdown-menu a:hover {
+    background-color: #1da1f2;
+    color: white !important;
+}
+
+/* Styling the header photo */
+.header_photo {
+	height: 400px;
+	width: 100%;
+}
+
+.header_container {
+	padding: 0;
+}
+
+/* Styling the display picture */
+.dp {
+	width: 220px;
+	height: 215px;
+	border-radius: 50%;
+	margin: -130px 0px 0px 100px;
+}
+
+/* Styling the navbar of the profile page */
+@media screen and (max-width: 560px) {
+	.dp {
+		width: 70px;
+		height: 65px;
+		border-radius: 50%;
+		margin: -15px 0px 0px 15px;
+	}
+
+	.info_bar {
+		height: 60px;
+		line-height: 5px;
+		font-size: 0.6em;
+	}
+	
+	.btn_edit {
+		border-radius: 500px;
+		color: grey;
+		margin-top: 10px;
+		cursor: pointer;
+		font-weight: bold;
+		font-size: 0.6em;
+	}
+
+	.col-btn {
+		padding-right: 40px !important;
+		padding-top: 10px;
+	}
+
+	.info_bar a {
+		padding-left: 10px !important;
+	}
+
+	.modal-header h4 {
+		color: #1da1f2;
+		margin-left: 110px !important;
+	}	
+}
+
+.info_bar {
+	height: 60px;
+	line-height: 5px;
+}
+
+.info_bar p {
+	padding-top: 13px;
+	padding-bottom: 0;
+	font-weight: bold;
+	color: grey;
+}
+
+.info_bar a {
+	color: grey;
+	font-weight: bold;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.info_bar a:hover {
+    border-bottom: 2px solid #1da1f2;
+    color: #1da1f2;
+    text-decoration: none;
+}
+
+.btn_edit {
+	border-radius: 500px;
+	color: grey;
+	margin-top: 10px;
+	margin-left: -30px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.col-btn {
+	padding-right: 80px;
+}
+
+.photo_label {
+	padding-bottom: 10px;
+	font-weight: bold;
+	color: grey;
+
+}
+
+.modal-header h4 {
+	color: #1da1f2;
+	margin-left: 170px;
+}
+
+.btn-submit {
+	border-radius: 500px;
+	font-weight: bold;
+	color: #1da1f2;
+	border: 1px solid #1da1f2;
+	width: 6em;
+	cursor: pointer;
+}
+
+.btn-submit:hover {
+	background-color: #d8f4ff;
+	color: #1da1f2;
+}
+
+/* Styling the main content of profile page */
+
+.main_content {
+	padding-top: 40px;
+}
+
+.main_content h5 {
+	font-weight: bold;
+}
+
+.self_email {
+	margin-top: -10px;
+	color: grey;
+}
+
+.self_date, .fi-web {
+	color: grey;
+}
+/* Styling the 'all tweets' section */
+.tweet_email{
+    font-size: 0.9em;
+    margin-left: -85px;
+    margin-top: 2px;
+    color: #9e9e9e;
+}
+
+.tweet_date {
+    font-size: 0.9em;
+    margin-left: -155px;
+    margin-top: 2px;
+    color: #9e9e9e;
+}
+
+.tweet_name {
+    font-size: 1em;
+    color: black;
+    font-weight: bold;
+}
+
+.tweet_text {
+    font-size: 0.9em;
+}
+
+.list-inline {
+    padding-left: 90px;
+}
+
+.list-inline-item {
+    padding-right: 10px;
+    color: #777777;
+}
+
+.like_color {
+    color: red;
+}
+
+.fa-retweet, .heart {
+    color: #777777;
+}
+
+.follow_btn {
+    border: 1px solid #49b9ff;
+    background-color: white;
+    color: #49b9ff;
+    font-weight: bold;
+    border-radius: 500px;
+    width: 8em;
+    font-size: 0.7em;
+    cursor: pointer;
+}
+
+.follow_btn:hover {
+    background-color: #eaf9ff;
+}
+
+.follow_title {
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.follow_email {
+    font-size: 0.9em;
+    color: #9e9e9e;
+}
+

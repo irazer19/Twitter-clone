@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block head %}
+
+<title>Profile</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <!-- Contends of the Navigation bar-->
+    <div class="container-fluid">
+        <div class="row nav">
+            <div class="col-sm-4 col-4 col-md-4">
+                <ul class="list-unstyled">
+                    <li class="home"><a href="{{ url_for('timeline', username=current_user.username) }}"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fa fa-bell-o"></i> Notifications</a></li>
+                </ul>
+            </div>
+            <!--Creating the twitter icon on navbar-->
+            <div class="col-sm-4 col-4 col-md-4">
+                <div class="row">
+                    <div class="col-sm-3 mx-auto">
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!--Displaying the profile info on timeline at left hand side-->
+            <div class="col-sm-4 col-4 col-md-4">
+                <div class="row">
+                    <div class="col-sm-6 ml-auto">
+                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img src="{{ profile_url }}" alt="" width="44" height="40" class="photo"></a>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item font-weight-bold">{{ current_user.username }}</a>
+                            <a href="#" class="dropdown-item text-secondary">@{{ current_user.email[:-10] }}</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-secondary">Profile</a>
+                            <a href="#" class="dropdown-item text-secondary">Help Center</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ url_for('logout') }}" class="dropdown-item text-secondary">Logout</a>
+
+                        </div>
+                        <button class="btn btn-info tweet" type="button">Tweet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Creating the header photo section -->
+    <div class="container-fluid header_container">
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <img src="{{ header_url }}" alt="header photo" class="header_photo">
+            </div>
+        </div>
+        <div class="row info_bar">
+            <div class="col-3 col-sm-3">
+                <img src="{{ profile_url }}" alt="#" class="dp">
+            </div>
+            <div class="col-9 col-sm-9">
+                <div class="row text-center">
+                    <div class="col-2 col-sm-2">
+                    <p>Tweets</p>
+                    <a href="#">{{ total_attrib[0] }}</a>
+                    </div>
+                    <div class="col-2 col-sm-2">
+                    <p>Following</p>
+                    <a href="#">{{ total_attrib[1] }}</a>
+                    </div>
+                    <div class="col-2 col-sm-2">
+                    <p>Followers</p>
+                    <a href="#">{{ total_attrib[2] }}</a>
+                    </div>
+                    <div class="col-2 col-sm-2">
+                    <p>Likes</p>
+                    <a href="#">{{ total_likes }}</a>
+                    </div>
+                    <div class="col-4 col-sm-4 col-btn">
+                        <button class="btn btn_edit btn-outline-secondary float-right" type="button" data-toggle="modal" data-target="#myModal">Edit profile</button>
+                        <!--Creating the modal for editing the profile page-->
+                        <div class="modal fade" id="myModal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4>Edit Profile</h4>
+                                        <button class="close" data-dismiss="modal" type="button">&times</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% from "_formhelpers.html" import render_field %}
+                                        <form action="{{ url_for('profile', username=current_user.username) }}" method="POST" enctype="multipart/form-data">
+                                            {{ form.hidden_tag() }}
+                                            {{ render_field(form.username, class="form-control", placeholder="Username") }}
+                                            {{ render_field(form.bio, class="form-control", placeholder="Bio") }}
+                                            {{ render_field(form.location, class="form-control", placeholder="Location") }}
+                                            {{ render_field(form.website, class="form-control", placeholder="Website") }}
+                                            {{ form.profile_photo.label(class="photo_label float-left") }}
+                                            {{ render_field(form.profile_photo, class="form-control") }}
+                                            {{ form.header_photo.label(class="photo_label float-left") }}
+                                            {{ render_field(form.header_photo, class="form-control") }}
+
+                                            <button class="btn btn-outline-secondary btn-submit" type="submit">Edit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+    <!-- Creating a container to store main page content -->
+    <div class="container main_content">
+        <div class="row">
+            <div class="col-sm-3">
+                <h5>{{ current_user.username }}</h5>
+                <p class="self_email">@{{ current_user.email[:-10] }}</p>
+                <p>{{ profile.bio }}</p>
+                <p>{{ profile.location }}</p>
+                <p><i class="fi-web"></i> <a href="#">{{ profile.website }}</a></p>
+                <p class="self_date"><i class="fa fa-calendar"></i> Joined {{ current_user.date }}</p>
+            </div>
+            <div class="col-sm-6">
+                <!--Displaying the Total number of self-made tweets in timeline page-->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Tweets</h5>
+                    </div>
+                    {% for tweet in tweets %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-2 col-sm-2">
+                                <img src="{{ profile_url }}" alt="dp" width="60" height="55" class="photo text_pic">
+                            </div>
+                            <div class="col-10 col-sm-10">
+                                <div class="row">
+                                    <div class="col-4 col-sm-4"><a href="#" class="tweet_name">{{ current_user.username }}</a></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ current_user.email[:-10] }}</p></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_date">-{{ tweet.date }}</p></div>
+                                </div>
+                                <p class="tweet_text">{{ tweet.tweet }}</p>
+                            </div>
+                        </div>
+                        <!--Creating Tweet likes and retweet-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><a href="#"><i class="fa fa-retweet"></i></a>&nbsp {{ tweet.retweet }}</li>
+                                    <li class="list-inline-item"><a href="#" id="{{ tweet.id }}" class="heart" onclick="sendLikes(this)"><i class="fa fa-heart"></i></a>&nbsp {{ tweet.likes }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                    <div class="card-footer">
+                        <p class="text-center"><i class="fa fa-twitter"></i></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="follow_title">Who to follow</h5>
+                        {% for user in display_users %}
+                        <div class="row">
+                            <div class="col-sm-3 col-3">
+                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
+                            </div>
+                            <div class="col-sm-9 col-9">
+                                <h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
+                                @{{ user[0].email[:-10] }}</span></h6>
+                                <button class="btn follow_btn" type="button" id="{{ user[0].username }}" 
+                                onclick="sendName(this)">{{ user[1] }}</button>
+
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

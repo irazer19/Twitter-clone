@@ -28,7 +28,7 @@
             <div class="col-sm-4 col-4 col-md-4">
                 <div class="row">
                     <div class="col-sm-6 ml-auto">
-                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo"></a>
+                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img src="{{ profile_url }}" alt="" width="44" height="40" class="photo"></a>
                         <div class="dropdown-menu">
                             <a href="#" class="dropdown-item font-weight-bold">{{ current_user.username }}</a>
                             <a href="#" class="dropdown-item text-secondary">@{{ current_user.email[:-10] }}</a>
@@ -52,12 +52,12 @@
             <div class="col-sm-3">
                 <!--Creating the profile info part of the timeline-->
                 <div class="card">
-                    <img src="http://www.broughtonschoolofmotoring.com/wp-content/uploads/1.jpeg" alt="#" width="100%"
+                    <img src="{{ header_url }}" alt="#" width="100%"
                      height="100">
-                     <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="#" width="86" height="80"
+                     <img src="{{ profile_url }}" alt="#" width="86" height="80"
                      class="photo pic">
                      <div class="profile_name">
-                         <h5><a href="#">{{ current_user.username }}</a></h5>
+                         <h5><a href="{{ url_for('profile', username=current_user.username) }}">{{ current_user.username }}</a></h5>
                          <p><a href="#" class="text-secondary">@{{ current_user.email[:-10] }}</a></p>
                      </div>
                      <div class="row total_tweets">
@@ -82,7 +82,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-2">
-                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo text_pic">
+                                <img src="{{ profile_url }}" alt="" width="44" height="40" class="photo text_pic">
                             </div>
                             {% from "_formhelpers.html" import render_field %}
                             <div class="col-sm-10">
@@ -97,13 +97,13 @@
                     </div>
                 </div>
 
-                <!--Displaying the Total number of tweets in timeline page-->
+                <!--Displaying the Total number of self-made tweets in timeline page-->
                 {% for tweet in tweets %}
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-2 col-sm-2">
-                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="60" height="55" class="photo text_pic">
+                                <img src="{{ profile_url }}" alt="" width="60" height="55" class="photo text_pic">
                             </div>
                             <div class="col-10 col-sm-10">
                                 <div class="row">
@@ -126,19 +126,19 @@
                     </div>
                 </div>
                 {% endfor %}
-
+                <!--Displaying total number of following user tweets-->
                 {% for user_tweets in following_tweets %}
                 {% for tweets in user_tweets %}
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-2 col-sm-2">
-                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="60" height="55" class="photo text_pic">
+                                <img src="{{ tweets.profile_photo }}" alt="" width="60" height="55" class="photo text_pic">
                             </div>
                             <div class="col-10 col-sm-10">
                                 <div class="row">
-                                    <div class="col-4 col-sm-4"><a href="#" class="tweet_name">{{ tweets.username }}</a></div>
-                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ current_user.email[:-10] }}</p></div>
+                                    <div class="col-4 col-sm-4"><a href="{{ url_for('profile', username=tweets.username) }}" class="tweet_name">{{ tweets.username }}</a></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ tweets.email[:-10] }}</p></div>
                                     <div class="col-4 col-sm-4"><p class="tweet_date">-{{ tweets.date }}</p></div>
                                 </div>
                                 <p class="tweet_text">{{ tweets.tweet }}</p>
@@ -167,12 +167,12 @@
                         {% for user in display_users %}
                         <div class="row">
                             <div class="col-sm-3 col-3">
-                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
+                                <img src="{{ user[2] }}" alt="" width="44" height="40" class="photo">
                             </div>
                             <div class="col-sm-9 col-9">
-                                <h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
-                                @{{ user[0].email[:-10] }}</span></h6>
-                                <button class="btn follow_btn" type="button" id="{{ user[0].username }}" 
+                                <a href="{{ url_for('profile', username=user[0].username) }}" class="follow_name"><h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
+                                @{{ user[0].email[:-10] }}</span></h6></a>
+                                <button class="btn follow_btn" type="button" id="{{ user[0].username }}"
                                 onclick="sendName(this)">{{ user[1] }}</button>
 
                             </div>

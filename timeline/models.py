@@ -6,11 +6,15 @@ class Tweets(db.Model):
     username = db.Column(db.String(80))
     retweet = db.Column(db.Integer)
     likes = db.Column(db.Integer)
+    email = db.Column(db.String(80))
+    profile_photo = db.Column(db.String(80))
     date = db.Column(db.String(30))
 
-    def __init__(self, tweet, username, date, retweet=0, likes=0):
+    def __init__(self, tweet, username, email, profile_photo, date, retweet=0, likes=0):
         self.tweet = tweet
         self.username = username
+        self.email = email
+        self.profile_photo = profile_photo
         self.retweet = retweet
         self.likes = likes
         self.date = date

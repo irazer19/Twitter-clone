@@ -1,7 +1,8 @@
-from twitter import app, db, login_manager
+from twitter import app, db, login_manager, photos
 from flask import render_template, session, redirect, url_for, request
 from timeline.forms import Tweet
-from user.models import Signup
+from user.forms import ProfileForm
+from user.models import Signup, Profile
 from timeline.models import Tweets, Followers, Following
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date
@@ -21,15 +22,18 @@ def timeline(username):
     """ Creating the view for timeline like tweets and displaying them """
     form = Tweet()
     user = Signup.query.filter_by(id=current_user.id).first()
+    # Extracting profile photo and header photo url
+    profile = Profile.query.filter_by(signup_id=current_user.id).first()
+    profile_url = '/static/images/{}'.format(profile.profile_photo)
+    header_url = '/static/images/{}'.format(profile.header_photo)
     #Creating tweet and posting them
     if request.method == 'POST' and form.validate_on_submit():
-        tweet = Tweets(form.tweet.data, user.username, date.today().strftime('%d %B, %Y'))
+        tweet = Tweets(form.tweet.data, user.username, user.email, profile_url, date.today().strftime('%d %B, %Y'))
         db.session.add(tweet)
         db.session.commit()
         return redirect(url_for('timeline', username=user.username))
     # Generating all the self made tweets
     tweets = Tweets.query.filter_by(username=username).order_by(Tweets.id.desc()).all()
-    user_profile = user.profile.first()
     total_attrib = []
     #Finding the total number of tweets
     total_attrib.append(len(tweets))
@@ -46,22 +50,28 @@ def timeline(username):
         following_tweets.append(user_tweets)
     # Displaying the 'who to follow' section and including 3 random real users in it
     display_users = []
-    for i in range(3):
-        temp = []
-        user = random.choice(users)
-        temp.append(user)
-        if Following.query.filter_by(username=current_user.username, following=user.username).first():
-            temp.append('Unfollow')
-        else:
-            temp.append('Follow')
-        display_users.append(temp)
+    if users:
+        for i in range(3):
+            temp = []
+            user = random.choice(users)
+            signup_url = Signup.query.filter_by(username=user.username).first()
+            user_url = '/static/images/{}'.format(signup_url.profile.first().profile_photo)
+            temp.append(user)
+            if Following.query.filter_by(username=current_user.username, following=user.username).first():
+                temp.append('Unfollow')
+            else:
+                temp.append('Follow')
+            temp.append(user_url)
+            display_users.append(temp)
 
 
     return render_template('timeline/timeline.html', 
                             form=form, tweets=tweets, 
                             display_users=display_users, 
                             total_attrib=total_attrib,
-                            user_profile=user_profile,
+                            profile=profile,
+                            profile_url=profile_url,
+                            header_url=header_url,
                             following_tweets=following_tweets)
 
 
@@ -105,9 +115,69 @@ def likes():
         db.session.commit()
         return 'success'
 
-@app.route('/profile/<username>')
+@app.route('/profile/<username>', methods=['GET', 'POST'])
 def profile(username):
-    return 'profile'
+    form = ProfileForm(username=username)
+    signup = Signup.query.filter_by(username=username).first()
+    profile = Profile.query.filter_by(signup_id=signup.id).first()
+    profile_url = '/static/images/{}'.format(profile.profile_photo)
+    header_url = '/static/images/{}'.format(profile.header_photo)
+
+    # Login for uploading photos
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            profile_name = photos.save(request.files['profile_photo'])
+            profile_url = '/static/images/{}'.format(profile_name)
+            profile.profile_photo = profile_name
+        except:
+            pass
+
+        try:
+            header_name = photos.save(request.files['header_photo'])
+            header_url = '/static/images/{}'.format(header_name)
+            profile.header_photo = header_name
+        except:
+            pass
+
+        signup.username = form.username.data
+        profile.bio = form.bio.data
+        profile.location = form.location.data
+        profile.website = form.website.data
+        db.session.commit()
+        return redirect(url_for('profile', username=username))
+    # Find the total number of tweets
+    total_likes = 0
+    tweets = Tweets.query.filter_by(username=username).order_by(Tweets.id.desc()).all()
+    for tweet in tweets:
+        total_likes = total_likes + tweet.likes
+    users = Signup.query.filter(Signup.username!=current_user.username).all()
+    # finding the total number of followers and following
+    total_attrib = []
+    total_attrib.append(len(tweets))
+    following = Following.query.filter_by(username=username).all()
+    total_attrib.append(len(following))
+    followers = Followers.query.filter_by(username=username).all()
+    total_attrib.append(len(followers))
+    # Displaying the 'who to follow' section and including 3 random real users in it
+    display_users = []
+    if users:
+        for i in range(3):
+            temp = []
+            user = random.choice(users)
+            temp.append(user)
+            if Following.query.filter_by(username=current_user.username, following=user.username).first():
+                temp.append('Unfollow')
+            else:
+                temp.append('Follow')
+            display_users.append(temp)
+    return render_template('timeline/profile.html', tweets=tweets,
+                                                    display_users=display_users,
+                                                    total_attrib=total_attrib,
+                                                    profile=profile,
+                                                    total_likes=total_likes,
+                                                    form=form,
+                                                    profile_url=profile_url,
+                                                    header_url=header_url)
 
 
 @app.route('/notifications/<username>')

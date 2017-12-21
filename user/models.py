@@ -38,7 +38,7 @@ class Profile(db.Model):
 
     def __init__(self, signup_id, bio='Hi there!', location='',
                        website='', profile_photo='sample_photo.svg',
-                       header_photo='blue', tweets=0,
+                       header_photo='sample_header.jpg', tweets=0,
                        following=0, followers=0):
         self.bio = bio
         self.location = location
