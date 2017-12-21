@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block head %}
+
+<title>Notifications</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='notifications.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+<body>
+    <!-- Contends of the Navigation bar-->
+    <div class="container-fluid">
+        <div class="row nav">
+            <div class="col-sm-4 col-4 col-md-4">
+                <ul class="list-unstyled">
+                    <li class="home"><a href="{{ url_for('timeline', username=current_user.username) }}"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="noti"><a href="#"><i class="fa fa-bell-o"></i> Notifications</a></li>
+                </ul>
+            </div>
+            <!--Creating the twitter icon on navbar-->
+            <div class="col-sm-4 col-4 col-md-4">
+                <div class="row">
+                    <div class="col-sm-1 mx-auto">
+                        <a href="#"><i class="fa fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!--Displaying the profile info on timeline at left hand side-->
+            <div class="col-sm-4 col-4 col-md-4">
+                <div class="row">
+                    <div class="col-sm-6 ml-auto">
+                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img src="{{ profile_url }}" alt="" width="44" height="40" class="photo"></a>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item font-weight-bold">{{ current_user.username }}</a>
+                            <a href="#" class="dropdown-item text-secondary">@{{ current_user.email[:-10] }}</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-secondary">Profile</a>
+                            <a href="#" class="dropdown-item text-secondary">Help Center</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ url_for('logout') }}" class="dropdown-item text-secondary">Logout</a>
+
+                        </div>
+                        <button class="btn btn-info tweet" type="button">Tweet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container main_content">
+    	<div class="row">
+    		<div class="col-sm-3">
+    			<div class="card">
+    				<div class="card-body">
+    					<h5>Trends for you.</h5>
+    					<ul class="list-unstyled">
+    						<li><a href="#">#10YearsOfTaareZameenPar</a></li>
+    						<p class="text-secondary">8045 tweets</p>
+    						<li><a href="#">#MyntraSaleStartsTonight</a></li>
+    						<p class="text-secondary">2209 tweets</p>
+    						<li><a href="#">#NationalRobinDay</a></li>
+    						<p class="text-secondary">2141 tweets</p>
+    						<li><a href="#">#SaareyanNuOutNow</a></li>
+    						<p class="text-secondary">1285 tweets</p>
+    						<li><a href="#">#FMQs</a></li>
+    						<p class="text-secondary">2481 tweets</p>
+    						<li><a href="#">#cake</a></li>
+    						<p class="text-secondary">1389 tweets</p>
+    						<li><a href="#">Leon Britton</a></li>
+    						<p class="text-secondary">30.8k tweets</p>
+    						<li><a href="#">#GiftASmile</a></li>
+    						<p class="text-secondary">1398 tweets</p>
+    						<li><a href="#">Prince Harry and Meghan Markle</a></li>
+    						<p class="text-secondary">Prince Harry and Meghan Markle's engagement photos are here</p>
+    					</ul>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="col-sm-6">
+    			<div class="card">
+    				<div class="card-header">
+    					<h4>Mentions</h4>
+    				</div>
+    				<div class="card-body">
+    				{% for follower in total_followers %}
+    					<span><i class="fa fa-user"></i> &nbsp<img src="{{ follower[1] }}" alt="#" class="profile_img"></span>
+    					<h6 class="user_name"><a href="#"><strong>{{ follower[0].followers }}</strong></a> followed you- 
+    					{{ follower[0].date }}</h6>
+    					<hr>
+    				{% endfor %}
+    				</div>
+    				<i class="col-1 col-sm-1 mx-auto fa fa-twitter"></i>
+    			</div>
+    		</div>
+
+    		<!--Who to follow section-->
+    		<div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="follow_title">Who to follow</h5>
+                        {% for user in display_users %}
+                        <div class="row">
+                            <div class="col-sm-3 col-3">
+                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
+                            </div>
+                            <div class="col-sm-9 col-9">
+                                <h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
+                                @{{ user[0].email[:-10] }}</span></h6>
+                                <button class="btn follow_btn" type="button" id="{{ user[0].username }}" 
+                                onclick="sendName(this)">{{ user[1] }}</button>
+
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+    		</div>
+    	</div>
+    </div>
+    <script src="{{ url_for('static', filename='follow.js') }}"></script>
+</body>
+
+{% endblock %}

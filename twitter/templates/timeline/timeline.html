@@ -13,7 +13,12 @@
             <div class="col-sm-4 col-4 col-md-4">
                 <ul class="list-unstyled">
                     <li class="home"><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fa fa-bell-o"></i> Notifications</a></li>
+                    <li><a href="{{ url_for('notifications', username=current_user.username) }}"><i class="fa fa-bell-o">
+                    </i> Notifications
+                    {% if total_notifications != 0 %}
+                    <span class="badge badge-danger">{{ total_notifications }}</span>
+                    {% endif %}
+                    </a></li>
                 </ul>
             </div>
             <!--Creating the twitter icon on navbar-->

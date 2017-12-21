@@ -3,7 +3,7 @@ from flask import render_template, session, redirect, url_for, request
 from timeline.forms import Tweet
 from user.forms import ProfileForm
 from user.models import Signup, Profile
-from timeline.models import Tweets, Followers, Following
+from timeline.models import Tweets, Followers, Following, Notifications
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date
 import random
@@ -22,6 +22,7 @@ def timeline(username):
     """ Creating the view for timeline like tweets and displaying them """
     form = Tweet()
     user = Signup.query.filter_by(id=current_user.id).first()
+    total_notifications = 0
     # Extracting profile photo and header photo url
     profile = Profile.query.filter_by(signup_id=current_user.id).first()
     profile_url = '/static/images/{}'.format(profile.profile_photo)
@@ -32,6 +33,12 @@ def timeline(username):
         db.session.add(tweet)
         db.session.commit()
         return redirect(url_for('timeline', username=user.username))
+
+    # Checking Notifications
+    if Notifications.query.filter_by(username=username).first():
+        notifications = Notifications.query.filter_by(username=username).all()
+        total_notifications = len(notifications)
+
     # Generating all the self made tweets
     tweets = Tweets.query.filter_by(username=username).order_by(Tweets.id.desc()).all()
     total_attrib = []
@@ -72,7 +79,8 @@ def timeline(username):
                             profile=profile,
                             profile_url=profile_url,
                             header_url=header_url,
-                            following_tweets=following_tweets)
+                            following_tweets=following_tweets,
+                            total_notifications=total_notifications)
 
 
 @app.route('/fname', methods=['POST'])
@@ -92,10 +100,12 @@ def fname():
     # Following the person on click of follow and adding them in tables
     else:
         following_person = current_user.username
-        followers = Followers(followed_person, following_person)
+        followers = Followers(followed_person, following_person, date.today().strftime('%d %B, %Y'))
+        notifications = Notifications(followed_person, following_person)
         following = Following(following_person, followed_person)
         db.session.add(followers)
         db.session.add(following)
+        db.session.add(notifications)
         db.session.commit()
         return 'Unfollow'
 
@@ -182,4 +192,40 @@ def profile(username):
 
 @app.route('/notifications/<username>')
 def notifications(username):
-    return 'notifications'
+    profile = Profile.query.filter_by(signup_id=current_user.id).first()
+    profile_url = '/static/images/{}'.format(profile.profile_photo)
+    followers = Followers.query.filter_by(username=current_user.username).order_by(Followers.id.desc()).all()
+    total_followers = []
+    for follower in followers:
+        follow = []
+        follower_user = Signup.query.filter_by(username=follower.followers).first()
+        follower_profile = Profile.query.filter_by(signup_id=follower_user.id).first()
+        follower_url = '/static/images/{}'.format(follower_profile.profile_photo)
+        follow.append(follower)
+        follow.append(follower_url)
+        total_followers.append(follow)
+
+    # Deleting Notifications
+    notif_del = Notifications.query.filter_by(username=username).delete()
+    db.session.commit()
+
+    # Displaying the 'who to follow' section and including 3 random real users in it
+    users = Signup.query.filter(Signup.username!=current_user.username).all()
+    display_users = []
+    if users:
+        for i in range(3):
+            temp = []
+            user = random.choice(users)
+            signup_url = Signup.query.filter_by(username=user.username).first()
+            user_url = '/static/images/{}'.format(signup_url.profile.first().profile_photo)
+            temp.append(user)
+            if Following.query.filter_by(username=current_user.username, following=user.username).first():
+                temp.append('Unfollow')
+            else:
+                temp.append('Follow')
+            temp.append(user_url)
+            display_users.append(temp)
+
+    return render_template('user/notifications.html', profile_url=profile_url, 
+                                                      total_followers=total_followers,
+                                                      display_users=display_users)

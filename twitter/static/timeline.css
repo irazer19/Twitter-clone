@@ -32,6 +32,11 @@ body {
     font-weight: bold;
 }
 
+.badge-danger {
+    font-size: 12px;
+    background-color: #ef1f48;
+}
+
 .nav li:hover {
     border-bottom: 3px solid #1da1f2;
 }

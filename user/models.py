@@ -49,6 +49,3 @@ class Profile(db.Model):
         self.following = following
         self.followers = followers
         self.signup_id = signup_id
-
-
-

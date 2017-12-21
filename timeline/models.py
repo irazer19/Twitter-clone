@@ -23,20 +23,28 @@ class Followers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))
     followers = db.Column(db.String(80))
+    date = db.Column(db.String(30))
 
-    def __init__(self, username=username, followers=followers):
+    def __init__(self, username, followers, date):
         self.username = username
         self.followers = followers
+        self.date = date
 
 class Following(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))
     following = db.Column(db.String(80))
 
-    def __init__(self, username=username, following=following):
+    def __init__(self, username, following):
         self.username = username
         self.following = following
 
 
+class Notifications(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80))
+    follower_name = db.Column(db.String(80))
 
-
+    def __init__(self, username, follower_name):
+        self.username = username
+        self.follower_name = follower_name
