@@ -15,13 +15,13 @@
             <div class="col-sm-4 col-4 col-md-4">
                 <ul class="list-unstyled">
                     <li class="home"><a href="{{ url_for('timeline', username=current_user.username) }}"><i class="fa fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fa fa-bell-o"></i> Notifications</a></li>
+                    <li><a href="{{ url_for('notifications', username=current_user.username) }}"><i class="fa fa-bell-o"></i> Notifications</a></li>
                 </ul>
             </div>
             <!--Creating the twitter icon on navbar-->
             <div class="col-sm-4 col-4 col-md-4">
                 <div class="row">
-                    <div class="col-sm-3 mx-auto">
+                    <div class="col-sm-1 mx-auto">
                         <a href="#"><i class="fa fa-twitter"></i></a>
                     </div>
                 </div>
@@ -30,7 +30,8 @@
             <div class="col-sm-4 col-4 col-md-4">
                 <div class="row">
                     <div class="col-sm-6 ml-auto">
-                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img src="{{ profile_url }}" alt="" width="44" height="40" class="photo"></a>
+                        <a class="photo dropdown-toggle" data-toggle="dropdown"><img 
+                        src="{{ '/static/images/{}'.format(current_user.profile.first().profile_photo) }}" alt="" width="44" height="40" class="photo"></a>
                         <div class="dropdown-menu">
                             <a href="#" class="dropdown-item font-weight-bold">{{ current_user.username }}</a>
                             <a href="#" class="dropdown-item text-secondary">@{{ current_user.email[:-10] }}</a>
@@ -41,7 +42,35 @@
                             <a href="{{ url_for('logout') }}" class="dropdown-item text-secondary">Logout</a>
 
                         </div>
-                        <button class="btn btn-info tweet" type="button">Tweet</button>
+                        <button class="btn btn-info tweet" data-toggle="modal" data-target="#myTweet" type="button">
+                        Tweet</button>
+                        <!--Creating modal for tweet button on navigation bar-->
+                        <div class="modal fade" id="myTweet">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Compose new Tweet</h5>
+                                        <button type="button" class="close" data-dismiss="modal">&times</button>
+                                    </div>
+                                    <div class="modal-body textfield">
+                                        <div class="row">
+                                            <div class="col-2 col-sm-2">
+                                                <img src="{{ '/static/images/{}'.format(current_user.profile.first().profile_photo) }}" alt="#" width="60" height="55" class="photo text_pic">
+                                            </div>
+                                            <div class="col-10 col-sm-10">
+                                                {% from "_formhelpers.html" import render_field %}
+                                                <form action="{{ url_for('timeline', username=current_user.username) }}" method="POST">
+                                                    {{ form_tweet.hidden_tag() }}
+                                                    {{ render_field(form_tweet.tweet, class="form-control", rows="3", placeholder="What's happening?") }}
+
+                                                    <button class="btn text_btn float-right" type="submit">Tweet</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,6 +106,7 @@
                     <p>Likes</p>
                     <a href="#">{{ total_likes }}</a>
                     </div>
+                    {% if current_user.username == profile.signup.username %}
                     <div class="col-4 col-sm-4 col-btn">
                         <button class="btn btn_edit btn-outline-secondary float-right" type="button" data-toggle="modal" data-target="#myModal">Edit profile</button>
                         <!--Creating the modal for editing the profile page-->
@@ -107,6 +137,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>  
             </div>
         </div>
@@ -116,12 +147,12 @@
     <div class="container main_content">
         <div class="row">
             <div class="col-sm-3">
-                <h5>{{ current_user.username }}</h5>
-                <p class="self_email">@{{ current_user.email[:-10] }}</p>
+                <h5>{{ profile.signup.username }}</h5>
+                <p class="self_email">@{{ profile.signup.email[:-10] }}</p>
                 <p>{{ profile.bio }}</p>
-                <p>{{ profile.location }}</p>
-                <p><i class="fi-web"></i> <a href="#">{{ profile.website }}</a></p>
-                <p class="self_date"><i class="fa fa-calendar"></i> Joined {{ current_user.date }}</p>
+                <p class="location"><i class="fa fa-map-marker"></i> {{ profile.location }}</p>
+                <p><i class="fa fa-link"></i> <a href="#">{{ profile.website }}</a></p>
+                <p class="self_date"><i class="fa fa-calendar"></i> Joined {{ profile.signup.date }}</p>
             </div>
             <div class="col-sm-6">
                 <!--Displaying the Total number of self-made tweets in timeline page-->
@@ -137,8 +168,8 @@
                             </div>
                             <div class="col-10 col-sm-10">
                                 <div class="row">
-                                    <div class="col-4 col-sm-4"><a href="#" class="tweet_name">{{ current_user.username }}</a></div>
-                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ current_user.email[:-10] }}</p></div>
+                                    <div class="col-4 col-sm-4"><a href="#" class="tweet_name">{{ tweet.username }}</a></div>
+                                    <div class="col-4 col-sm-4"><p class="tweet_email">@{{ tweet.email[:-10] }}</p></div>
                                     <div class="col-4 col-sm-4"><p class="tweet_date">-{{ tweet.date }}</p></div>
                                 </div>
                                 <p class="tweet_text">{{ tweet.tweet }}</p>
@@ -170,11 +201,11 @@
                         {% for user in display_users %}
                         <div class="row">
                             <div class="col-sm-3 col-3">
-                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
+                                <img src="{{ user[2] }}" alt="" width="44" height="40" class="photo">
                             </div>
                             <div class="col-sm-9 col-9">
-                                <h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
-                                @{{ user[0].email[:-10] }}</span></h6>
+                                <a href="{{ url_for('profile', username=user[0].username) }}" class="follow_name"><h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
+                                @{{ user[0].email[:-10] }}</span></h6></a>
                                 <button class="btn follow_btn" type="button" id="{{ user[0].username }}" 
                                 onclick="sendName(this)">{{ user[1] }}</button>
 

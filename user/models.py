@@ -21,10 +21,12 @@ class Signup(UserMixin, db.Model):
         self.date = date
 
     def __repr__(self):
+        """ Representation of the user instance """
         return '<User {}>'.format(self.username)
 
 
 class Profile(db.Model):
+    """ Creating the table for storing User profile personal information """
     id = db.Column(db.Integer, primary_key=True)
     bio = db.Column(db.String(80))
     location = db.Column(db.String(80))
@@ -40,6 +42,7 @@ class Profile(db.Model):
                        website='', profile_photo='sample_photo.svg',
                        header_photo='sample_header.jpg', tweets=0,
                        following=0, followers=0):
+        """ Initializing the table profile"""
         self.bio = bio
         self.location = location
         self.website = website

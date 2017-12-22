@@ -44,7 +44,35 @@
                             <a href="{{ url_for('logout') }}" class="dropdown-item text-secondary">Logout</a>
 
                         </div>
-                        <button class="btn btn-info tweet" type="button">Tweet</button>
+                        <button class="btn btn-info tweet" data-toggle="modal" data-target="#myTweet" type="button">
+                        Tweet</button>
+                        <!--Creating modal for tweet button on navigation bar-->
+                        <div class="modal fade" id="myTweet">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Compose new Tweet</h5>
+                                        <button type="button" class="close" data-dismiss="modal">&times</button>
+                                    </div>
+                                    <div class="modal-body textfield">
+                                        <div class="row">
+                                            <div class="col-2 col-sm-2">
+                                                <img src="{{ profile_url }}" alt="#" width="60" height="55" class="photo text_pic">
+                                            </div>
+                                            <div class="col-10 col-sm-10">
+                                                {% from "_formhelpers.html" import render_field %}
+                                                <form action="{{ url_for('timeline', username=current_user.username) }}" method="POST">
+                                                    {{ form.hidden_tag() }}
+                                                    {{ render_field(form.tweet, class="form-control", rows="3", placeholder="What's happening?") }}
+
+                                                    <button class="btn text_btn float-right" type="submit">Tweet</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,12 +161,12 @@
                 {% endfor %}
                 <!--Displaying total number of following user tweets-->
                 {% for user_tweets in following_tweets %}
-                {% for tweets in user_tweets %}
+                {% for tweets in user_tweets[0] %}
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-2 col-sm-2">
-                                <img src="{{ tweets.profile_photo }}" alt="" width="60" height="55" class="photo text_pic">
+                                <img src="{{ user_tweets[1] }}" alt="" width="60" height="55" class="photo text_pic">
                             </div>
                             <div class="col-10 col-sm-10">
                                 <div class="row">

@@ -16,6 +16,7 @@ def signup():
     # Validating the signup form
     unique_error = ""
     if form.validate_on_submit():
+        # Checking if the username is already taken
         if not Signup.query.filter_by(username=form.username.data).first():
             user = Signup(form.username.data, 
                           form.email.data, 
@@ -29,6 +30,7 @@ def signup():
             db.session.commit()
             return redirect(url_for('login'))
         else:
+            # Error is username is already taken
             unique_error = 'Username is already taken.'
     return render_template('user/signup.html', form=form, unique_error=unique_error)
 
@@ -45,12 +47,15 @@ def login():
     """ This is a login route. It validates the login form and checks the user
     if it exists or not and also checks for the correct username and password"""
     error = ""
+    # Initialzing the login form
     form = LoginForm()
+    # Checking if redirect url is present after login
     if request.args.get('next'):
         session['next'] = request.args.get('next')
     if form.validate_on_submit():
         if Signup.query.filter_by(username=form.username.data).first():
             user = Signup.query.filter_by(username=form.username.data).first()
+            # Matching the password and logging user
             if check_password_hash(user.password, form.password.data):
                 if 'next' in session and session['next']!=None and session['next']!='/logout':
                     next = session['next']
@@ -80,5 +85,6 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """ Logging user out """
     logout_user()
     return redirect(url_for('login'))

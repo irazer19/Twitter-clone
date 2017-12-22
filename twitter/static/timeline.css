@@ -76,6 +76,37 @@ body {
         margin-left: -20px;
         margin-top: 20px;
     }
+
+    #myTweet h5 {
+        font-weight: bold;
+        padding-left: 80px !important;
+    }   
+
+    .tweet_email {
+        font-size: 0.9em;
+        margin-left: -20px !important;
+        margin-top: 2px;
+        color: #9e9e9e;
+    }
+
+    .tweet_date {
+        font-size: 0.9em;
+        margin-left: -40px !important;
+        margin-top: 2px;
+        color: #9e9e9e;
+    }
+
+    .tweet_name {
+        font-size: 1em;
+        color: black;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .tweet_text {
+        font-size: 0.9em;
+        margin-left: 22px;
+    }
 }
 
 .tweet {
@@ -138,6 +169,11 @@ body {
 
 .textfield {
     background-color:#eaf9ff;
+}
+
+#myTweet h5 {
+    font-weight: bold;
+    padding-left: 120px;
 }
 
 .text_btn {

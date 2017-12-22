@@ -41,7 +41,35 @@
                             <a href="{{ url_for('logout') }}" class="dropdown-item text-secondary">Logout</a>
 
                         </div>
-                        <button class="btn btn-info tweet" type="button">Tweet</button>
+                        <button class="btn btn-info tweet" data-toggle="modal" data-target="#myTweet" type="button">
+                        Tweet</button>
+                        <!--Creating modal for tweet button on navigation bar-->
+                        <div class="modal fade" id="myTweet">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Compose new Tweet</h5>
+                                        <button type="button" class="close" data-dismiss="modal">&times</button>
+                                    </div>
+                                    <div class="modal-body textfield">
+                                        <div class="row">
+                                            <div class="col-2 col-sm-2">
+                                                <img src="{{ '/static/images/{}'.format(current_user.profile.first().profile_photo) }}" alt="#" width="60" height="55" class="photo text_pic">
+                                            </div>
+                                            <div class="col-10 col-sm-10">
+                                                {% from "_formhelpers.html" import render_field %}
+                                                <form action="{{ url_for('timeline', username=current_user.username) }}" method="POST">
+                                                    {{ form_tweet.hidden_tag() }}
+                                                    {{ render_field(form_tweet.tweet, class="form-control", rows="3", placeholder="What's happening?") }}
+
+                                                    <button class="btn text_btn float-right" type="submit">Tweet</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,7 +113,7 @@
     				<div class="card-body">
     				{% for follower in total_followers %}
     					<span><i class="fa fa-user"></i> &nbsp<img src="{{ follower[1] }}" alt="#" class="profile_img"></span>
-    					<h6 class="user_name"><a href="#"><strong>{{ follower[0].followers }}</strong></a> followed you- 
+    					<h6 class="user_name"><a href="{{ url_for('profile', username=follower[0].followers) }}"><strong>{{ follower[0].followers }}</strong></a> followed you- 
     					{{ follower[0].date }}</h6>
     					<hr>
     				{% endfor %}
@@ -102,11 +130,11 @@
                         {% for user in display_users %}
                         <div class="row">
                             <div class="col-sm-3 col-3">
-                                <img src="https://beebom-redkapmedia.netdna-ssl.com/wp-content/uploads/2016/01/Reverse-Image-Search-Engines-Apps-And-Its-Uses-2016.jpg" alt="" width="44" height="40" class="photo">
+                                <img src="{{ user[2] }}" alt="" width="44" height="40" class="photo">
                             </div>
                             <div class="col-sm-9 col-9">
-                                <h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
-                                @{{ user[0].email[:-10] }}</span></h6>
+                                <a href="{{ url_for('profile', username=user[0].username) }}" class="follow_name"><h6><span id="name">{{ user[0].username }}</span> <span class="follow_email">
+                                @{{ user[0].email[:-10] }}</span></h6></a>
                                 <button class="btn follow_btn" type="button" id="{{ user[0].username }}" 
                                 onclick="sendName(this)">{{ user[1] }}</button>
 
