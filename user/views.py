@@ -42,6 +42,7 @@ def load_user(user_id):
 
 
 
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """ This is a login route. It validates the login form and checks the user
